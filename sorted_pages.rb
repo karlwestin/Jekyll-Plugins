@@ -29,7 +29,7 @@ module Jekyll
     priority :high
 
     def generate(site)
-      order = site.pages.delete_if {|x| x.order == nil }
+      order = site.pages.select {|x| x.order != nil }
       order = order.sort_by {|obj| obj.order }
       site.config['sorted_pages'] = order
     end
