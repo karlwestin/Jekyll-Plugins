@@ -14,7 +14,7 @@ module Jekyll
     def read
       self.read_layouts
       self.read_directories
-      self.read_static "../_static"
+      self.read_static "_static"
     end
     
     # adding a read_static function, looking for static files _only_ in the specified directory
@@ -24,9 +24,12 @@ module Jekyll
       # just not having to pass in the static directory twice on first load
       orig_dir = dir if orig_dir.empty?
     
-      base = File.join(self.source, dir)
+      base = File.join("./", dir)
       
-      entries = Dir.chdir(base) { filter_entries(Dir['*']) }
+      # själva läsningen är Dir['*'], 
+      # base är en sträng
+      entries = Dir.chdir(base) { filter_entries(Dir['*']) } 
+      
 
       entries.each do |f|
         f_abs = File.join(base, f)
@@ -38,14 +41,12 @@ module Jekyll
 
             # filter the source dir out to make it end up in "_site" folder
             filtered_dir = dir.sub(orig_dir, "")
-            source_dir = self.source + "/" + orig_dir + "/"       
-
+            source_dir = "./" + orig_dir + "/"       
+            
             # All files found are treated as static files
             static_files << StaticFile.new(self, source_dir, filtered_dir, f)
         end
       end
     end    
-    
   end
-
 end
